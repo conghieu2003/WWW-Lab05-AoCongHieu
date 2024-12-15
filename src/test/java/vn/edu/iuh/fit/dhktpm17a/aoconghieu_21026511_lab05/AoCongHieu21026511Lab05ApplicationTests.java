@@ -1,13 +1,29 @@
 package vn.edu.iuh.fit.dhktpm17a.aoconghieu_21026511_lab05;
 
+
+import com.neovisionaries.i18n.CountryCode;
+import jakarta.annotation.PostConstruct;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import vn.edu.iuh.fit.dhktpm17a.aoconghieu_21026511_lab05.backend.repositories.AddressRepository;
 
 @SpringBootTest
-class AoCongHieu21026511Lab05ApplicationTests {
+class LabWeek05ApplicationTests {
+    @Autowired
+    private AddressRepository repository;
 
-    @Test
-    void contextLoads() {
+    @PostConstruct
+    void add_test() {
+        Address add=new Address("11","NVQ","sg","5345643", CountryCode.AF);
+        add.setId(1L);
+        repository.save(add);
+
     }
-
+    @Test
+    void test_01(){
+        Address add =repository.findById(1L).get();
+        Assertions.assertEquals(add.getNumber(),"11");
+    }
 }

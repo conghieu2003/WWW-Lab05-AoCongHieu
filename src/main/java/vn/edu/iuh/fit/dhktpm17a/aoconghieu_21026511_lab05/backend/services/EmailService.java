@@ -8,21 +8,18 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Service
-public class InvitationService {
+public class EmailService {
 
     @Autowired
     private JavaMailSender mailSender;
 
-    // Gửi email mời ứng tuyển
-    public void sendInvitation(String toEmail, String candidateName) throws MessagingException {
+    public void sendInvitationEmail(String to, String subject, String body) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
-        helper.setTo(toEmail);
-        helper.setSubject("Thư mời ứng tuyển");
-        helper.setText("Xin chào " + candidateName + ",<br/>"
-                + "Chúng tôi rất vui khi mời bạn tham gia ứng tuyển tại công ty của chúng tôi."
-                + "<br/><br/>Trân trọng,<br/>Đội ngũ tuyển dụng", true);
+        helper.setTo(to);
+        helper.setSubject(subject);
+        helper.setText(body, true);
 
         mailSender.send(message);
     }
