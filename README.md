@@ -94,12 +94,13 @@ IV.	Thực thi
 
  
 7.3.	Danh sách công việc đang tuyển của Công Ty
-![Uploading image.png…]()
+![image](https://github.com/user-attachments/assets/f178e5f7-aadf-4042-bc56-93f63abdbbef)
 
 
 7.4.	Đăng tuyển thêm công việc
  ![image](https://github.com/user-attachments/assets/fa18acef-5db2-4d22-a554-b41aa2aeb69f)
-![image](https://github.com/user-attachments/assets/946e5a0a-3e24-4777-a3d7-d0b1623a1bdf)
+![Uploading image.png…]()
+
 
  
 7.5.	Xem chi tiết công việc và ứng viên phù hợp 
