@@ -96,9 +96,9 @@
             <p><strong>CompanyName:</strong> <span th:text="${job.company != null ? job.getCompany().getName() : ''}"></span></p>
 
             <!-- Form to Send Mail -->
-            <form action="#" th:action="@{/jobs/sendmailcompany}" method="post">
+            <form action="#" th:action="@{/jobs/apply/{jobId}(jobId=${job.id})}" method="post">
               <input type="hidden" name="id" th:value="${job.getId()}"/>
-              <button type="submit" class="btn btn-success w-100">Gửi Mail</button>
+              <button type="submit" class="btn btn-success w-100">Gửi Mail Ứng Tuyển</button>
             </form>
 
             <!-- Add a "View Details" Button -->
@@ -106,7 +106,6 @@
           </div>
         </div>
       </div>
-    </div>
 
 </body>
 </html>

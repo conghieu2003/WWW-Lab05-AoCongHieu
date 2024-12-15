@@ -23,7 +23,9 @@ List<Job> findBySkillId(@Param("skillId") Long skillId);
     List<Job> findByTitleContainingIgnoreCase(@Param("keyword") String keyword);
 
     @Query("SELECT js.skill FROM JobSkill js WHERE js.job.id = :jobId")
+
     public List<Skill> findSkillsByJobId(@Param("jobId") Long jobId);
+
     public List<Job> findAllByCompany_Id(long id);
 
     @Query("SELECT s.skill FROM JobSkill s WHERE s.job.id = :jobId")

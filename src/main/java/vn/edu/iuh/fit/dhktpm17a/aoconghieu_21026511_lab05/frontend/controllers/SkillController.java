@@ -58,14 +58,11 @@ public class SkillController {
     @GetMapping("/viewSkills")
     public ModelAndView viewSkills(@SessionAttribute(value = "candidateLogin", required = false) Candidate candidate) {
         if (candidate == null) {
-            // Nếu ứng viên không đăng nhập, chuyển hướng đến trang login
             return new ModelAndView("redirect:/login");
         }
 
-        // Lấy danh sách kỹ năng của ứng viên từ service
         List<Skill> skills = skillService.getSkillsByUserId(candidate.getId());
 
-        // Tạo ModelAndView và thêm kỹ năng vào
         ModelAndView mav = new ModelAndView("skills/viewSkills");
         mav.addObject("skills", skills);
         return mav;
@@ -80,21 +77,7 @@ public class SkillController {
         modelAndView.setViewName("skills/LearnSkills");
         return modelAndView;
     }
-//    // Lấy danh sách kỹ năng cần học của ứng viên
-//    @GetMapping("/findSkillLearn")
-//    public ModelAndView findSkillLearn(HttpServletRequest request) {
-//        Candidate candidate = (Candidate) request.getSession().getAttribute("candidateLogin");
-//        if (candidate == null) {
-//            return new ModelAndView("redirect:/login");
-//        }
-//
-//        List<Skill> skills = skillRepository.findSkillCandidateShouldLearn(candidate.getId());
-//        ModelAndView modelAndView = new ModelAndView("skills/KillsLearn");
-//        modelAndView.addObject("skills", skills);
-//        return modelAndView;
-//    }
-//
-//    // Lấy danh sách kỹ năng của công ty và ứng viên phù hợp
+
 //    @GetMapping("/findCadidateskillMatchOfCompany")
 //    public ModelAndView findCandidateSkillMatchOfCompany(HttpServletRequest request) {
 //        Company company = (Company) request.getSession().getAttribute("companyLogin");
@@ -111,7 +94,7 @@ public class SkillController {
 //        return mav;
 //    }
 //
-//    // Lọc ứng viên theo kỹ năng
+//
 //    @PostMapping("/findCandidatewithskill")
 //    public ModelAndView findCandidateMatchWithSkill(@RequestParam("skillId") Long skillId, HttpServletRequest request) {
 //        Company company = (Company) request.getSession().getAttribute("companyLogin");
@@ -128,34 +111,5 @@ public class SkillController {
 //        return mav;
 //    }
 //
-//    // Gửi email mời ứng tuyển đến ứng viên
-//    @PostMapping("/sendmail")
-//    public ModelAndView sendMailToCandidate(@RequestParam("id") Long candidateId, HttpServletRequest request) {
-//
-//        Company company = (Company) request.getSession().getAttribute("companyLogin");
-//        if (company == null) {
-//            return new ModelAndView("redirect:/login");
-//        }
-//
-//        List<Skill> skills = skillRepository.findSkillByCompany(company.getId());
-//        List<Candidate> candidates = candidateRepository.findAll().subList(0, 10);
-//
-//        ModelAndView mav = new ModelAndView("company/findCandidateSkillOfCompany");
-//        mav.addObject("skills", skills);
-//        mav.addObject("candidates", candidates);
-//
-//        Candidate candidate = candidateRepository.findById(candidateId).orElse(null);
-//        if (candidate != null) {
-//            try {
-//                invitationService.sendInvitation(candidate.getEmail(), candidate.getFullName());
-//                mav.addObject("mess", "Gửi email mời ứng tuyển thành công!");
-//            } catch (MessagingException e) {
-//                mav.addObject("mess", "Lỗi khi gửi email. Vui lòng thử lại.");
-//            }
-//        } else {
-//            mav.addObject("mess", "Không tìm thấy ứng viên!");
-//        }
-//
-//        return mav;
-//    }
+
 }

@@ -38,7 +38,7 @@
           <p class="card-text">
             <span th:each="skill : ${job.jobSkills}" th:text="${skill.skill.skillName}" class="badge bg-primary"></span>
           </p>
-          <a href="#" class="btn btn-link">Xem chi tiết</a>
+          <a href="@{/jobs/details/{id}(id=${job.id})}" class="btn btn-link">Xem chi tiết</a>
         </div>
       </div>
     </div>

@@ -66,10 +66,15 @@ public class CandidateServices {
     public List<Candidate> getCandidatesBySkills(List<Skill> skills) {
         return candidateRepository.findCandidatesBySkills(skills);
     }
-//    public List<Candidate> findCandidatesByJobId(Long jobId) {
-//        return candidateRepository.findCandidatesByJobId(jobId);
-//    }
+    // Truy vấn ứng viên theo kỹ năng
+    public List<Candidate> findCandidatesBySkill(String skillName) {
+        return candidateRepository.findCandidatesBySkill(skillName);
+    }
 
+    // Lấy thông tin ứng viên và kỹ năng của họ
+    public List<Candidate> getCandidateWithSkills(long candidateId) {
+        return candidateRepository.findCandidateWithSkills(candidateId);
+    }
     public Candidate findById(Long id) {
         return candidateRepository.findById(id).orElse(null);
     }

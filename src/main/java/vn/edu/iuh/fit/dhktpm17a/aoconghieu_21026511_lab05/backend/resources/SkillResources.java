@@ -34,13 +34,11 @@ public class SkillResources {
         return skillService.getAllSkills();
     }
     public void createJob(Job job, List<Long> skillIds) {
-        // Lưu công việc
+
         jobRepository.save(job);
 
-        // Lấy danh sách kỹ năng từ ID
         List<Skill> skills = skillService.getSkillsByIds(skillIds);
 
-        // Tạo liên kết JobSkill
         for (Skill skill : skills) {
             JobSkill jobSkill = new JobSkill();
             jobSkill.setJob(job);

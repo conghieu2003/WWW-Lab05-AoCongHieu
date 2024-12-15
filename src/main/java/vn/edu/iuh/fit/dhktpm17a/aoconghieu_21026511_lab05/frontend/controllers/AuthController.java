@@ -23,13 +23,11 @@ public class AuthController {
     @Autowired
     private CompanyServices companyService;
 
-    // Hiển thị trang đăng nhập
     @GetMapping("/login")
     public String loginPage() {
         return "login"; // Trả về login.html
     }
 
-    // Xử lý đăng nhập
     @PostMapping("/login")
     public String login(@RequestParam String username, @RequestParam String password, @RequestParam String role, Model model, HttpServletRequest request) {
         // Xóa các thuộc tính cụ thể trong session
@@ -37,7 +35,6 @@ public class AuthController {
         session.removeAttribute("candidateLogin");
         session.removeAttribute("companyLogin");
 
-        // Tiến hành xử lý đăng nhập
         boolean isValid = false;
         if ("candidate".equals(role)) {
             Candidate candidate = candidateService.authenticate(username, password);

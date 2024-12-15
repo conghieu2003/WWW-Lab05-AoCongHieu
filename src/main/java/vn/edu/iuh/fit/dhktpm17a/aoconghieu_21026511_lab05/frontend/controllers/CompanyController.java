@@ -12,10 +12,7 @@ import vn.edu.iuh.fit.dhktpm17a.aoconghieu_21026511_lab05.backend.models.Company
 import vn.edu.iuh.fit.dhktpm17a.aoconghieu_21026511_lab05.backend.models.Job;
 import vn.edu.iuh.fit.dhktpm17a.aoconghieu_21026511_lab05.backend.repositories.CandidateRepository;
 import vn.edu.iuh.fit.dhktpm17a.aoconghieu_21026511_lab05.backend.repositories.JobRepository;
-import vn.edu.iuh.fit.dhktpm17a.aoconghieu_21026511_lab05.backend.services.CandidateServices;
-import vn.edu.iuh.fit.dhktpm17a.aoconghieu_21026511_lab05.backend.services.CompanyServices;
-import vn.edu.iuh.fit.dhktpm17a.aoconghieu_21026511_lab05.backend.services.InvitationService;
-import vn.edu.iuh.fit.dhktpm17a.aoconghieu_21026511_lab05.backend.services.JobServices;
+import vn.edu.iuh.fit.dhktpm17a.aoconghieu_21026511_lab05.backend.services.*;
 
 import java.util.List;
 
@@ -34,56 +31,72 @@ public class CompanyController {
     private CompanyServices companyServices;
     @Autowired
     private CandidateServices candidateServices;
+
+    @Autowired
+    private EmailService emailServices;
     // Trang Dashboard cho công ty
     @GetMapping("/dashboard")
     public String showCompanyDashboard(Model model) {
         model.addAttribute("jobs", jobServices.getAllJobs());
-        model.addAttribute("candidates", candidateServices.getAllCandidates());// Nếu cần thêm thông tin ứng viên
-        return "company/dashboard"; // Giao diện Dashboard cho công ty
+        model.addAttribute("candidates", candidateServices.getAllCandidates());
+        return "company/dashboard";
     }
     // Hiển thị form tạo công việc
     @GetMapping("/create-job")
     public String showCreateJobForm(Model model) {
-        List<Company> companies = companyServices.getAllCompanies(); // Lấy danh sách công ty
-        model.addAttribute("companies", companies); // Thêm danh sách công ty vào model
-        model.addAttribute("job", new Job()); // Thêm đối tượng Job mới vào model
-        return "/company/create-job"; // Trả về view
+        List<Company> companies = companyServices.getAllCompanies();
+        model.addAttribute("companies", companies);
+        model.addAttribute("job", new Job());
+        return "/company/create-job";
     }
 
-    // Xử lý việc tạo công việc
     @PostMapping("/create-job")
     public String createJob(@ModelAttribute Job job, @RequestParam long companyId) {
         Company company = companyServices.getCompanyById(companyId); // Lấy Company từ ID
-        job.setCompany(company);  // Gán công ty vào job
-        jobServices.saveJob(job); // Lưu job vào cơ sở dữ liệu
-        return "redirect:/company/job-list"; // Điều hướng đến trang danh sách công việc
+        job.setCompany(company);
+        jobServices.saveJob(job);
+        return "redirect:/company/job-list";
     }
     // Trang danh sách công việc
     @GetMapping("/job-list")
     public String showJobList(Model model) {
         model.addAttribute("jobs", jobServices.getAllJobs());
-        return "company/job-list"; // Giao diện danh sách công việc cho công ty
+        return "company/job-list";
     }
 
     // Trang danh sách ứng viên
     @GetMapping("/candidate-list")
     public String showCandidateList(Model model) {
         model.addAttribute("candidates", candidateServices.getAllCandidates());
-        return "company/candidate-list"; // Giao diện danh sách ứng viên cho công ty
+        return "company/candidate-list";
+    }
+    @PostMapping("/send-invitation")
+    public String sendInvitation(@RequestParam("candidateEmail") String candidateEmail,
+                                 @RequestParam("senderName") String senderName,
+                                 @RequestParam("jobTitle") String jobTitle,
+                                 @RequestParam("jobLink") String jobLink,
+                                 Model model) {
+        try {
+            // Gửi email mời ứng viên
+            emailServices.sendJobInvitationEmail(candidateEmail, senderName, jobTitle, jobLink);
+            model.addAttribute("message", "Email mời ứng tuyển đã được gửi đến ứng viên.");
+        } catch (MessagingException e) {
+            model.addAttribute("message", "Có lỗi khi gửi email mời ứng tuyển.");
+        }
+        return "redirect:/company/candidate-list";
     }
 
-    // Đăng xuất
     @GetMapping("/logout")
     public String logout() {
         return "redirect:/login"; // Điều hướng đến trang login khi đăng xuất
     }
-//    @PostMapping("/findCandiatewithJob")
-//    public String findCandidatesWithJob(@RequestParam Long jobId, Model model) {
-//        List<Candidate> candidates = candidateServices.findCandidatesByJobId(jobId);
-//        model.addAttribute("candidates", candidates);
-//        model.addAttribute("jobs", jobServices.getAllJobs()); // Để hiển thị lại danh sách công việc
-//        return "company/candidate-list"; // Đường dẫn đến view danh sách ứng viên
-//    }
+
+    @PostMapping("/filterCandidatesBySkill")
+    public String filterCandidatesBySkill(@RequestParam("skillName") String skillName, Model model) {
+        List<Candidate> candidates = candidateServices.findCandidatesBySkill(skillName);
+        model.addAttribute("candidates", candidates);
+        return "company/candidate-list";  // Trả về giao diện danh sách ứng viên
+    }
 
 
 

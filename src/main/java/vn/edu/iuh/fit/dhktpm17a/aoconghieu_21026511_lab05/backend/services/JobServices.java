@@ -28,22 +28,21 @@ public class JobServices {
     public void saveJob(Job job) {
         jobRepository.save(job);
     }
-//    public List<Job> getJobsForCandidate(Long candID) {
-//        return jobRepository.findByCandidateId(candID);
-//    }
+
     public List<Job> getJobsBySkill(Long skillId) {
         return jobRepository.findBySkillId(skillId);
     }
+
     public List<Job> getAllJobs() {
         return jobRepository.findAll(); // Truy vấn tất cả công việc
     }
+
     public List<Job> searchJobsByKeyword(String keyword) {
         if (keyword == null || keyword.isBlank()) {
             return jobRepository.findAll(); // Trả về tất cả công việc nếu từ khóa trống
         }
         return jobRepository.findByTitleContainingIgnoreCase(keyword.trim());
     }
-    // Tìm kiếm công việc theo từ khóa
     public List<Job> searchJobs(String keyword) {
         return jobRepository.findAll().stream()
                 .filter(job -> job.getDescription().toLowerCase().contains(keyword.toLowerCase()))
@@ -54,23 +53,18 @@ public class JobServices {
                 .orElseThrow(() -> new EntityNotFoundException("Job not found"));
     }
 
-    // Lấy thông tin công việc theo ID
     public Job getJobDetails(Long jobId) {
         return jobRepository.findById(jobId).orElse(null);
     }
 
-    // Lấy kỹ năng của công việc
     public List<Skill> getJobSkills(Long jobId) {
         return jobRepository.findSkillsByJobId(jobId);
     }
     public void createJob(Job job, List<Long> skillIds) {
-        // Lưu công việc
         jobRepository.save(job);
 
-        // Lấy danh sách kỹ năng từ ID
         List<Skill> skills = skillService.getSkillsByIds(skillIds);
 
-        // Tạo liên kết JobSkill
         for (Skill skill : skills) {
             JobSkill jobSkill = new JobSkill();
             jobSkill.setJob(job);
@@ -84,5 +78,8 @@ public class JobServices {
     List<Skill> skills = jobRepository.findSkillsByJobId(jobId);
     return candidateRepository.findCandidatesBySkillsAndLocation(skills, job.getCompany().getAddress().getCity());
 }
+    public List<Job> getJobsByCompanyId(Long companyId) {
+        return jobRepository.findByCompanyId(companyId);
+    }
 }
 
